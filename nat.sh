@@ -18,7 +18,7 @@ start)
 stop)
 	sysctl net.inet.ip.forwarding=0
 
-	kill $(cat /var/run/natd.pid)
+	kill $(cat /var/run/natd.pid) || exit 1
 
 	/sbin/ipfw -f flush
 	/sbin/ipfw add allow ip from any to any
