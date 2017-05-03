@@ -8,8 +8,8 @@ test -d $srcdir || {
 	exit 1
 }
 
-for i in `ls ${srcdir}`; do
-	dst=${bindir}/$(echo $i | sed 's/.sh$//')
+for i in `ls ${srcdir}/*.sh`; do
+	dst=${bindir}/$(basename $i | sed 's/.sh$//')
 	cat $i > $dst
 	chmod +x $dst
 	echo installed $dst
