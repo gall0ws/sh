@@ -5,7 +5,8 @@ shift
 cmd=$@
 
 while true; do
+	out=$($cmd)
 	clear
-	$cmd
+	echo "$out"
 	sleep $pause
 done
