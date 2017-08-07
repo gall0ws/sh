@@ -6,7 +6,7 @@ cmd="$1"
 iif=${2:-eth0}     ## internal interface 
 eif=${3:-wlan0}    ## external interface (e.g. the one connected to the internet)
 
-ipfwd=/sbin/ipfw
+ipfw=/sbin/ipfw
 iptables=/usr/sbin/iptables
 
 freebsd_start() {
