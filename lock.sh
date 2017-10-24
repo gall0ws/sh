@@ -1,13 +1,16 @@
 #!/bin/sh
 
-img=~/pix/lockscrn
+set -x
+umask 027
+
 cmd=/usr/local/bin/i3lock
-cmd_args='-n -f'
+cmd_args='-n -f -c 000000'
+effect='-colorspace Gray -blur 1'
 
-(import -window root ${img}.png &&
- convert -colorspace Gray  -blur 1 ${img}{,2}.png) || {
-	$cmd $cmd_args -c 000000
-	exit 0
-}
+ts=`date +%Y%m%d%H%M%S`
+shot=~/pix/ss/${ts}.png
+img=~/pix/lockscrn.png
 
-$cmd $cmd_args -i ${img}2.png
+(import -window root $shot && convert $effect $shot $img) || img=/dev/null
+
+$cmd $cmd_args -i $img
