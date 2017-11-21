@@ -1,13 +1,13 @@
 #!/bin/sh
 
-tm=$1
-shift
-cmd="$@"
-
 usage() {
 	echo "usage: $0 INTERVAL CMD" >&2
 	exit 64
 }
+
+tm=$1
+shift 2>/dev/null || usage
+cmd="$@"
 
 spawn() {
 	$@ >/dev/null 2>&1
