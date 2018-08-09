@@ -3,10 +3,9 @@
 PATH=/usr/bin:/usr/local/bin
 
 set -x
-umask 027
 
 cmd=i3lock
-cmd_args=' -n -f -c 000000'
+cmd_args='-n -f -c 000000'
 shot=~/pix/lockscrn_orig.png
 img=~/pix/lockscrn.png
 fx='-colorspace Gray -blur 1'
