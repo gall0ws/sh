@@ -1,9 +1,10 @@
 #!/bin/sh
+set -e
 
 flen=${1:-4}
 fnum=${2:-4}
 
-let ssz="$flen * $fnum"
+ssz=`expr $flen '*' $fnum`
 
 openssl rand -base64 $ssz 		\
 	| tr -d '\n+/=' 		\
