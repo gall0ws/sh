@@ -3,11 +3,13 @@
 
 ## Capture a short video of your screen about every 60±10 minutes.
 
-baseinterval=3600
-variation=600
+interval=3600
+var=600
 videolen=10
 outputfmt=%Y%m%d%H%M
 outputdir=~/video/lifecap
+ffmpeg=/opt/homebrew/bin/ffmpeg
+vcodec=libx264
 lockf=/tmp/lifecap.lock
 
 if [ -e $lockf ]; then
@@ -22,6 +24,9 @@ touch $lockf
 trap removelock EXIT
 
 while true; do
-    sleep `expr $baseinterval + $RANDOM % 600 - $RANDOM % 600`
-    screencapture -v -V $videolen -k -C "$outputdir/`date +$outputfmt`.mov"
+    sleep `expr $interval + $RANDOM % $var - $RANDOM % $var`
+    vid="$outputdir/`date +$outputfmt`"
+    screencapture -k -V $videolen ${vid}.mov
+    nice -n 50 $ffmpeg -i ${vid}.mov -c:v $vcodec ${vid}.mp4
+    rm ${vid}.mov
 done
