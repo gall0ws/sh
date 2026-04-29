@@ -3,8 +3,8 @@
 bindir=${1-$HOME/bin}
 hash="md5 -q"
 
-bins="a+.sh a-.sh flood.sh genpw.sh gg.sh monitor.sh pixup.sh q.sh spongemock.sh \
-           typespeed_hs_trim.sh "
+scripts="a+.sh a-.sh flood.sh genpw.sh gg.sh monitor.sh pixup.sh q.sh \
+            spongemock.sh typespeed_hs_trim.sh videolen.sh "
 
 Darwin="lifecap.sh"
 FreeBSD="lock.sh nat.sh urxvt-setfont.sh xm.sh pkg_log.sh"
@@ -17,12 +17,12 @@ test -d $bindir || {
 	exit 1
 }
 
-eval bins+="$`uname`"
+eval scripts+="$`uname`"
 
-for i in $bins; do
+for i in $scripts; do
 	dst=${bindir}/`echo $i | sed 's/.sh$//'`
         if [ ! -e "$dst" ] || [ `$hash $dst` != `$hash $i` ]; then
-            cp $i $dst
+            cp $i $dst || continue
 	    chmod +x $dst
 	    echo installed $dst
         fi
