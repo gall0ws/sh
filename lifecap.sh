@@ -16,17 +16,17 @@ if [ -e $lockf ]; then
     exit 0
 fi
 
-removelock () {
-    rm $lockf
+rmlock () {
+    rm -f $lockf
 }
 
-touch $lockf
-trap removelock EXIT
+printf "%d %d\n" $$ `date +%s` > $lockf
+trap rmlock EXIT
 
 while true; do
     sleep `expr $interval + $RANDOM % $var - $RANDOM % $var`
     vid="$outputdir/`date +$outputfmt`"
     screencapture -k -V $videolen ${vid}.mov
-    nice -n 50 $ffmpeg -i ${vid}.mov -c:v $vcodec ${vid}.mp4
+    nice -n 50 $ffmpeg -y -i ${vid}.mov -c:v $vcodec ${vid}.mp4
     rm ${vid}.mov
 done
