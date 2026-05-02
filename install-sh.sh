@@ -4,7 +4,7 @@ bindir=${1-$HOME/bin}
 hash="md5 -q"
 
 scripts="a+.sh a-.sh flood.sh genpw.sh gg.sh monitor.sh pixup.sh q.sh \
-            spongemock.sh typespeed_hs_trim.sh videolen.sh "
+            renamei.sh spongemock.sh typespeed_hs_trim.sh videolen.sh "
 
 Darwin="lifecap.sh"
 FreeBSD="lock.sh nat.sh urxvt-setfont.sh xm.sh pkg_log.sh"
