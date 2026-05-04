@@ -72,7 +72,7 @@ done
 
 # sets variables in the parent shell
 echo export dryrun=$dryrun locase=$locase shifts=$shifts
-}`
+}` || exit $?
 
 # consume parsed arguments
 while [ $shifts -gt 0 ]; do
@@ -106,6 +106,7 @@ for i in `seq $#`; do
 
     if [ -e "${path}/${new}" ] && [ `inode "${path}/${new}"` != `inode "${file}"` ]; then
         printf "skipping %s: %s/%s already exists\n" "$file"" $path" "$new"
+        continue
     fi
 
     $dryrun mv -v "${file}" "${path}/${new}"
