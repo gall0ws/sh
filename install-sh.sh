@@ -3,7 +3,7 @@
 bindir=${1-$HOME/bin}
 hash="md5 -q"
 
-scripts="a+.sh a-.sh flood.sh genpw.sh gg.sh monitor.sh pixup.sh q.sh \
+scripts="a+.sh a-.sh flood.sh genpw.sh gg.sh lesspipe.sh monitor.sh pixup.sh q.sh \
             renamei.sh spongemock.sh typespeed_hs_trim.sh videolen.sh "
 
 Darwin="lifecap.sh"
