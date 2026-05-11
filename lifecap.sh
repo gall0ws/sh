@@ -11,22 +11,21 @@ outputdir=~/video/lifecap
 ffmpeg=/opt/homebrew/bin/ffmpeg
 vcodec=libx264
 lockf=/tmp/lifecap.lock
+pid=$$
 
-if [ -e $lockf ]; then
-    exit 0
-fi
+trap "rm -f $lockf" EXIT
 
-rmlock () {
-    rm -f $lockf
-}
+(
 
-printf "%d %d\n" $$ `date +%s` > $lockf
-trap rmlock EXIT
+    lockf -t0 9 || exit 1
+    printf "%d %d\n" $pid `date +%s` >&9
 
-while true; do
-    sleep `expr $interval + $RANDOM % $var - $RANDOM % $var`
-    vid="$outputdir/`date +$outputfmt`"
-    screencapture -k -V $videolen ${vid}.mov
-    nice -n 50 $ffmpeg -y -i ${vid}.mov -c:v $vcodec ${vid}.mp4
-    rm ${vid}.mov
-done
+    while true; do
+        sleep `expr $interval + $RANDOM % $var - $RANDOM % $var`
+        vid="$outputdir/`date +$outputfmt`"
+        screencapture -k -V $videolen ${vid}.mov
+        nice -n 50 $ffmpeg -y -i ${vid}.mov -c:v $vcodec ${vid}.mp4
+        rm ${vid}.mov
+    done
+
+) 9>>$lockf
