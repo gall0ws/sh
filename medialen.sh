@@ -4,15 +4,32 @@
 mediainfo=/opt/homebrew/bin/mediainfo
 quiet=false
 cmdname=`basename "$0"`
+query='$mediainfo "$1" | awk -F": " "/Duration/{ print \$2; exit }"'
+query_secs='$mediainfo --Output=JSON "$1" | jq -r .media.track[0].Duration'
 
-if [ "$1" = "-q" ]; then
-    quiet=true
-    shift
-fi
-
-if [ $# = 0 ]; then
-    printf "usage: %s [-q] file ...\n" $cmdname >&2
+usage() {
+    printf "usage: %s [-qs] file ...\n" $cmdname >&2
     exit 1
+}
+
+while :; do
+    getopts sq arg $@ || break
+    case $arg in
+        q)
+            quiet=true
+            ;;
+        s)
+            query=$query_secs
+            ;;
+        \?)
+            usage
+            ;;
+    esac
+done
+
+shift `expr $OPTIND - 1`
+if [ $# = 0 ]; then
+    usage
 fi
 
 while [ $# != 0 ]; do
@@ -24,9 +41,9 @@ while [ $# != 0 ]; do
         continue
     fi
     if ! $quiet; then
-        printf "%s:\t" `basename $1`
+        printf "%s:\t" "`basename "$1"`"
     fi
-    out=`$mediainfo "$1" | awk -F': ' '/Duration/{ print $2; exit }'`
+    out=`eval $query`
     if ! $quiet || [ ${#out} -gt 0 ]; then
         echo $out
     fi
