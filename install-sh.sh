@@ -3,8 +3,8 @@
 bindir=${1-$HOME/bin}
 hash="md5 -q"
 
-scripts="a+.sh a-.sh cleanup_subs.sh flood.sh genpw.sh gg.sh lesspipe.sh monitor.sh \
-               pixup.sh q.sh renamei.sh spongemock.sh typespeed_hs_trim.sh videolen.sh "
+scripts="a+.sh a-.sh cleanup_subs.sh flood.sh genpw.sh gg.sh lesspipe.sh medialen.sh monitor.sh \
+               pixup.sh q.sh renamei.sh spongemock.sh typespeed_hs_trim.sh"
 
 Darwin="lifecap.sh"
 FreeBSD="lock.sh nat.sh urxvt-setfont.sh xm.sh pkg_log.sh"
@@ -16,6 +16,7 @@ test -d $bindir || {
     exit 1
 }
 
+scripts+=" "
 eval scripts+="$`uname`"
 
 for i in $scripts; do
