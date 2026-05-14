@@ -12,6 +12,7 @@ cmdname=`basename "$0"`
 
 usage () {
     printf "usage: %s [-d] [-n] file ...\n" $cmdname >&2
+    exit 64
 }
 
 inode () {
@@ -39,54 +40,34 @@ simplify () {
         | tr -d '[:special:]'
 }
 
-
-# Hack: parse arguments in a subshell in order to avoid losing metachars in $*
-# See BUGS in getopt(1)
-`{
 shifts=0
-args=$(getopt dn $*)
-if [ $? != 0 ]; then
-    usage
-    exit 64
-fi
-
-set -- $args
-while true; do
-    case "$1" in
-        -d)
+while :; do
+    getopts dn opt $@ || break
+    case $opt in
+        d)
             dryrun=echo
-            shift
             let shifts++
             ;;
-        -n)
+        n)
             locase=false
-            shift
             let shifts++
             ;;
-        --)
-            shift
-            break
-            ;;
+        \?)
+            usage
     esac
 done
+shift $shifts
 
-# sets variables in the parent shell
-echo export dryrun=$dryrun locase=$locase shifts=$shifts
-}` || exit $?
-
-# consume parsed arguments
-while [ $shifts -gt 0 ]; do
+if [ "$1" = "--" ]; then
     shift
-    ((shifts--))
-done
-
+fi
 if [ $# = 0 ]; then
     usage
-    exit 64
 fi
 
 for i in `seq $#`; do
-    file="`eval echo "\\${${i}}"`"
+    j=$(printf '%s' $`echo $i`)
+    file="`eval echo \\"$j\\"`"
     if [ ! -e "$file" ]; then
         printf "%s: error: %s does not exist\n" $cmdname "$file" >&2
         exit 66
